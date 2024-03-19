@@ -1,0 +1,22 @@
+Relation,PromptTemplate
+BandHasMember,Who are the members of {subject_entity}?
+CityLocatedAtRiver,Which river is {subject_entity} located at?
+CompanyHasParentOrganisation,What is the parent organization of {subject_entity}?
+CountryBordersCountry,Which countries border {subject_entity}?
+CountryHasOfficialLanguage,What is the official language of {subject_entity}?
+CountryHasStates,Which states are part of {subject_entity}?
+FootballerPlaysPosition,What position does {subject_entity} play in football?
+PersonCauseOfDeath,What caused the death of {subject_entity}?
+PersonHasAutobiography,What is the title of {subject_entity}'s autobiography?
+PersonHasEmployer,Who is {subject_entity}'s employer?
+PersonHasNoblePrize,In which field did {subject_entity} receive the Nobel Prize?
+PersonHasNumberOfChildren,How many children does {subject_entity} have?
+PersonHasPlaceOfDeath,Where did {subject_entity} die?
+PersonHasProfession,What is {subject_entity}'s profession?
+PersonHasSpouse,Who is {subject_entity} married to?
+PersonPlaysInstrument,What instrument does {subject_entity} play?
+PersonSpeaksLanguage,What languages does {subject_entity} speak?
+RiverBasinsCountry,In which country can you find the {subject_entity} river basin?
+SeriesHasNumberOfEpisodes,How many episodes does the series {subject_entity} have?
+StateBordersState,Which states border the state of {subject_entity}?
+CompoundHasParts,What are the components of {subject_entity}?
