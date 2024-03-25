@@ -78,7 +78,10 @@ def run(args):
     
     # Read the prompt templates and train data from CSV files
     if task == "text-generation":
-        pipe = pipeline(task=task, model=model, tokenizer=tokenizer, top_k=args.top_k, device=args.gpu, fp16=args.fp16) 
+        # the following line caused an error for me, on Windows 11, no GPU, using OPT. Error was "ValueError: The following `model_kwargs` are not used by the model: ['fp16']"
+        # pipe = pipeline(task=task, model=model, tokenizer=tokenizer, top_k=args.top_k, device=args.gpu, fp16=args.fp16) 
+        # this is my temporary fix - not passing on that parameter.
+        pipe = pipeline(task=task, model=model, tokenizer=tokenizer, top_k=args.top_k, device=args.gpu) 
         logger.info(f"Reading question prompt templates from \"{args.question_prompts}\"...")
         prompt_templates = read_prompt_templates_from_csv(args.question_prompts)
     else:
