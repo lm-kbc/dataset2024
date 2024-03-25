@@ -23,7 +23,7 @@ Running instructions for the Huggingface baselines:
 ### Evaluation script
 
 Run instructions evaluation script:
-  * ```python evaluate.py -p data/val.jsonl -g data/testrun-XYZ.jsonl```
+  * ```python evaluate.py -g data/val.jsonl -p data/testrun-XYZ.jsonl```
 
 The first parameter hereby indicates the prediction file, the second the ground truth file.
 
