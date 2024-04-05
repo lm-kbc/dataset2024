@@ -42,7 +42,6 @@ python baseline.py \
  
 ### Evaluation Script
 
-Run instructions evaluation script:
 ```bash
 python evaluate.py \
   -g data/val.jsonl \
