@@ -1,6 +1,6 @@
-# Knowledge Base Construction from Pre-trained Language Models (LM-KBC) 2nd Edition
+# LM-KBC: Knowledge Base Construction from Pre-trained Language Models (3rd Edition)
 
-This repository contains dataset for the LM-KBC challenge at ISWC 2024.
+This repository contains dataset for the 3rd LM-KBC challenge at ISWC 2024.
 
 ## Dataset v0.1
 
