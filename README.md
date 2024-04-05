@@ -1,8 +1,8 @@
 # LM-KBC: Knowledge Base Construction from Pre-trained Language Models (3rd Edition)
 
-This repository contains dataset for the 3rd LM-KBC challenge at ISWC 2024.
+This repository contains dataset for the 3rd LM-KBC challenge at ISWC 2024. Visit the challenge's website for more information: https://lm-kbc.github.io/challenge2024/
 
-## Dataset v0.1
+### Dataset v0.1
 
  - 25.3.2024: Release of preliminary dataset v0.1, evaluation script, GPT-baseline
 
@@ -40,7 +40,7 @@ python baseline.py \
 ```
 
  
-### Evaluation script
+### Evaluation Script
 
 Run instructions evaluation script:
 ```bash
@@ -49,11 +49,9 @@ python evaluate.py \
   -p data/testrun-XYZ.jsonl
 ```
 
-The first parameter hereby indicates the prediction file, the second the ground truth file.
+Parameters: ``-g`` (the ground truth file), ``-p`` (the prediction file).
 
-----------------------------------------------------------------
-
-## Dataset Characteristics
+### Dataset Characteristics
 Number of unique subject-entities in the data splits.
 
 ```text
@@ -66,7 +64,7 @@ Number of unique subject-entities in the data splits.
 | companyTradesAtStockExchange  ...                     Null values |                           
 ```
 
-## Baseline performance
+### Baseline Performance
 
 BERT
 
@@ -80,9 +78,8 @@ BERT
 | companyTradesAtStockExchange  ...
 | *** Average ***               ...
 ```
-----------------------------------------------------------------
 
-### YOUR prediction file
+### YOUR Prediction File
 
 Your prediction file should be in the jsonl format.
 Each line of a valid prediction file contains a JSON object which must
