@@ -13,17 +13,41 @@ As baseline, we provide a script that can run masked LMs and causal LMs from Hug
 Running instructions for the Huggingface baselines:
  - For BERT
 
-```python baseline.py  --input data/val.jsonl --fill_mask_prompts prompts.csv --question_prompts question-prompts.csv  --output testrun-bert.jsonl --train_data data/train.jsonl --model bert-large-cased --batch_size 32 --gpu 0```
+```bash
+python baseline.py  \
+  --input data/val.jsonl \
+  --fill_mask_prompts prompts.csv \
+  --question_prompts question-prompts.csv \
+  --output testrun-bert.jsonl \
+  --train_data data/train.jsonl \
+  --model bert-large-cased \
+  --batch_size 32 \
+  --gpu 0
+```
 
  - For OPT-1.3b
 
-```python baseline.py  --input data/val.jsonl --fill_mask_prompts prompts.csv --question_prompts question-prompts.csv  --output testrun-opt.jsonl --train_data data/train.jsonl --model facebook/opt-1.3b --batch_size 8 --gpu 0```
+```bash
+python baseline.py \
+  --input data/val.jsonl \
+  --fill_mask_prompts prompts.csv \
+  --question_prompts question-prompts.csv \
+  --output testrun-opt.jsonl \
+  --train_data data/train.jsonl \
+  --model facebook/opt-1.3b \
+  --batch_size 8 \
+  --gpu 0
+```
 
  
 ### Evaluation script
 
 Run instructions evaluation script:
-  * ```python evaluate.py -g data/val.jsonl -p data/testrun-XYZ.jsonl```
+```bash
+python evaluate.py \
+  -g data/val.jsonl \
+  -p data/testrun-XYZ.jsonl
+```
 
 The first parameter hereby indicates the prediction file, the second the ground truth file.
 
