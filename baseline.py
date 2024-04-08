@@ -77,19 +77,19 @@ def create_prompt(subject_entity: str, relation: str, prompt_templates: dict,
 
 def run(args):
     # Load the model
-    model_type = args.model
+    model_name = args.model
 
-    logger.info(f"Loading the tokenizer \"{model_type}\"...")
-    tokenizer = AutoTokenizer.from_pretrained(model_type)
+    logger.info(f"Loading the tokenizer \"{model_name}\"...")
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-    task = "fill-mask" if "bert" in model_type.lower() else "text-generation"
-    logger.info(f"Model: {model_type} -> Task: '{task}'")
+    task = "fill-mask" if "bert" in model_name.lower() else "text-generation"
+    logger.info(f"Model: {model_name} -> Task: '{task}'")
 
-    logger.info(f"Loading the model \"{model_type}\"...")
+    logger.info(f"Loading the model \"{model_name}\"...")
     if task == "fill-mask":
-        model = AutoModelForMaskedLM.from_pretrained(model_type)
+        model = AutoModelForMaskedLM.from_pretrained(model_name)
     else:
-        model = AutoModelForCausalLM.from_pretrained(model_type)
+        model = AutoModelForCausalLM.from_pretrained(model_name)
 
     try:
         pipe = pipeline(task=task, model=model, tokenizer=tokenizer,
@@ -127,7 +127,8 @@ def run(args):
 
     # Load the input file
     logger.info(f"Loading the input file \"{args.input}\"...")
-    input_rows = [json.loads(line) for line in open(args.input, "r")]
+    with open(args.input) as f:
+        input_rows = [json.loads(line) for line in f]
     logger.info(f"Loaded {len(input_rows):,} rows.")
 
     # Create prompts

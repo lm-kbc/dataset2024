@@ -1,9 +1,15 @@
 import argparse
-from typing import List, Dict
+import json
+from pathlib import Path
+from typing import List, Dict, Union
 
 import pandas as pd
 
-from file_io import read_lm_kbc_jsonl
+
+def read_jsonl_file(file_path: Union[str, Path]) -> List[Dict]:
+    with open(file_path, "r") as f:
+        rows = [json.loads(line) for line in f]
+    return rows
 
 
 def true_positives(preds: List, gts: List) -> int:
@@ -141,8 +147,8 @@ def main():
 
     args = parser.parse_args()
 
-    pred_rows = read_lm_kbc_jsonl(args.predictions)
-    gt_rows = read_lm_kbc_jsonl(args.ground_truth)
+    pred_rows = read_jsonl_file(args.predictions)
+    gt_rows = read_jsonl_file(args.ground_truth)
 
     scores_per_sr_pair = evaluate_per_sr_pair(pred_rows, gt_rows)
     scores_per_relation = combine_scores_per_relation(scores_per_sr_pair)
