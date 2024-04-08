@@ -1,6 +1,5 @@
 import argparse
-import string
-from typing import List, Dict, Union
+from typing import List, Dict
 
 import pandas as pd
 import numpy as np
@@ -11,7 +10,7 @@ from file_io import *
 def true_positives(preds: List, gts: List) -> int:
     tp = 0
     for pred in preds:
-        if (pred in gts):
+        if pred in gts:
             tp += 1
 
     return tp
@@ -20,23 +19,24 @@ def true_positives(preds: List, gts: List) -> int:
 def precision(preds: List[str], gts: List[str]) -> float:
     # when nothing is predicted, precision 1 irrespective of the ground truth value
     try:
-        if len(preds)==0:
+        if len(preds) == 0:
             return 1
         # When the predictions are not empty
         return min(true_positives(preds, gts) / len(preds), 1.0)
     except TypeError:
-        return 0.0    
+        return 0.0
 
 
 def recall(preds: List[str], gts: List[str]) -> float:
     try:
         # When ground truth is empty return 1 even if there are predictions (edge case)
-        if len(gts)==0 or gts==[""]:
+        if len(gts) == 0 or gts == [""]:
             return 1.0
         # When the ground truth is not empty
         return true_positives(preds, gts) / len(gts)
     except TypeError:
         return 0.0
+
 
 def f1_score(p: float, r: float) -> float:
     try:
@@ -52,13 +52,13 @@ def rows_to_dict(rows: List[Dict]) -> Dict:
 def evaluate_per_sr_pair(pred_rows, gt_rows) -> List[Dict[str, float]]:
     pred_dict = rows_to_dict(pred_rows)
     gt_dict = rows_to_dict(gt_rows)
-    
+
     results = []
 
     for subj, rel in gt_dict:
         # get the ground truth objects
         gts = gt_dict[(subj, rel)]
-        
+
         # get the predictions
         preds = pred_dict[(subj, rel)]
 
@@ -106,15 +106,13 @@ def main():
     parser = argparse.ArgumentParser(description="Evaluate Precision, Recall and F1-score of predictions")
 
     parser.add_argument(
-        "-p",
-        "--predictions",
+        "-p", "--predictions",
         type=str,
         required=True,
         help="Path to the predictions file (required)"
     )
     parser.add_argument(
-        "-g",
-        "--ground_truth",
+        "-g", "--ground_truth",
         type=str,
         required=True,
         help="Path to the ground truth file (required)"

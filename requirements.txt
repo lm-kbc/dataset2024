@@ -2,3 +2,5 @@ pandas
 torch
 transformers
 tqdm
+requests
+numpy
