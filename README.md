@@ -1,6 +1,6 @@
 # LM-KBC: Knowledge Base Construction from Pre-trained Language Models (3rd Edition)
 
-This repository hosts data for the LM-KBC challenge at ISWC 2024.
+This repository hosts data for the LM-KBC challenge at ISWC 2024 (https://lm-kbc.github.io/challenge2024/).
 
 This repository contains:
 
@@ -95,6 +95,9 @@ Number of unique subject-entities in the data splits.
 
 ## Evaluation metrics
 
+We evaluate the predictions using Precision, Recall, and F1-score.
+See the evaluation script (`evaluate.py`) for more details.
+
 ```bash
 python evaluate.py \
   -g data/val.jsonl \
@@ -134,7 +137,7 @@ Parameters: ``-g`` (the ground truth file), ``-p`` (the prediction file).
 
 ### Baselines
 
-As baseline, we provide a script that can run masked LMs and causal LMs from Huggingface in the baseline.py, use these
+As baseline, we provide a script that can run masked LMs and causal LMs from HuggingFace in the `baseline.py` script, use these
 to generate entity surface forms, and use a Wikidata API for entity disambiguation.
 
 Running instructions for the HuggingFace baselines:
