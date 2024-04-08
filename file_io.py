@@ -11,17 +11,10 @@ def read_lm_kbc_jsonl(file_path: Union[str, Path]) -> List[Dict]:
     Args:
         file_path: path to the jsonl file
     Returns:
-        list of dictionaries, each possibly has the following keys:
-        - "SubjectEntity": str
-        - "Relation": str
-        - "ObjectEntities":
-            None or List[List[str]] (can be omitted for the test input)
+        list of dictionaries
     """
-    rows = []
     with open(file_path, "r") as f:
-        for line in f:
-            row = json.loads(line)
-            rows.append(row)
+        rows = [json.loads(line) for line in f]
     return rows
 
 
