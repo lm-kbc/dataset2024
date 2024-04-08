@@ -5,7 +5,8 @@ import logging
 import requests
 import random
 
-from transformers import AutoModelForMaskedLM, AutoModelForCausalLM, AutoTokenizer, pipeline
+from transformers import AutoModelForMaskedLM, AutoModelForCausalLM, \
+    AutoTokenizer, pipeline
 from typing import List
 
 # Configure logging
@@ -25,10 +26,12 @@ def disambiguation_baseline(item):
     except ValueError:
         # If not, proceed with the Wikidata search
         try:
-            url = f"https://www.wikidata.org/w/api.php?action=wbsearchentities&search={item}&language=en&format=json"
+            url = (f"https://www.wikidata.org/w/api.php?"
+                   f"action=wbsearchentities&search={item}"
+                   f"&language=en&format=json")
             data = requests.get(url).json()
             # Return the first id (Could upgrade this in the future)
-            return data['search'][0]['id']
+            return data["search"][0]["id"]
         except:
             return item
 
@@ -37,7 +40,9 @@ def disambiguation_baseline(item):
 def read_prompt_templates_from_csv(file_path: str):
     with open(file_path) as csvfile:
         reader = csv.DictReader(csvfile)
-        prompt_templates = {row["Relation"]: row["PromptTemplate"] for row in reader}
+        prompt_templates = {
+            row["Relation"]: row["PromptTemplate"] for row in reader
+        }
     return prompt_templates
 
 
@@ -49,55 +54,75 @@ def read_train_data_from_csv(file_path: str):
 
 
 # Create a prompt using the provided data
-def create_prompt(subject_entity: str, relation: str, prompt_templates: dict, instantiated_templates: List[str],
-                  tokenizer, few_shot: int = 0, task: str = "fill-mask") -> str:
+def create_prompt(subject_entity: str, relation: str, prompt_templates: dict,
+                  instantiated_templates: List[str], tokenizer,
+                  few_shot: int = 0, task: str = "fill-mask") -> str:
     prompt_template = prompt_templates[relation]
     if task == "text-generation":
         if few_shot > 0:
-            random_examples = random.sample(instantiated_templates, min(few_shot, len(instantiated_templates)))
+            random_examples = random.sample(
+                instantiated_templates,
+                min(few_shot, len(instantiated_templates))
+            )
         else:
             random_examples = []
         few_shot_examples = "\n".join(random_examples)
-        prompt = f"{few_shot_examples}\n{prompt_template.format(subject_entity=subject_entity)}"
+        prompt = (f"{few_shot_examples}"
+                  f"\n{prompt_template.format(subject_entity=subject_entity)}")
     else:
-        prompt = prompt_template.format(subject_entity=subject_entity, mask_token=tokenizer.mask_token)
+        prompt = prompt_template.format(subject_entity=subject_entity,
+                                        mask_token=tokenizer.mask_token)
     return prompt
 
 
 def run(args):
     # Load the model
     model_type = args.model
-    logger.info(f"Loading the model \"{model_type}\"...")
+
+    logger.info(f"Loading the tokenizer \"{model_type}\"...")
     tokenizer = AutoTokenizer.from_pretrained(model_type)
-    model = AutoModelForMaskedLM.from_pretrained(
-        model_type) if "bert" in model_type.lower() else AutoModelForCausalLM.from_pretrained(model_type)
+
     task = "fill-mask" if "bert" in model_type.lower() else "text-generation"
+    logger.info(f"Model: {model_type} -> Task: '{task}'")
+
+    logger.info(f"Loading the model \"{model_type}\"...")
+    if task == "fill-mask":
+        model = AutoModelForMaskedLM.from_pretrained(model_type)
+    else:
+        model = AutoModelForCausalLM.from_pretrained(model_type)
+
+    try:
+        pipe = pipeline(task=task, model=model, tokenizer=tokenizer,
+                        top_k=args.top_k, device=args.gpu, fp16=args.fp16)
+    except ValueError:
+        pipe = pipeline(task=task, model=model, tokenizer=tokenizer,
+                        top_k=args.top_k, device=args.gpu)
 
     # Read the prompt templates and train data from CSV files
     if task == "text-generation":
-        # the following line caused an error for me, on Windows 11, no GPU, using OPT.
-        # Error was "ValueError: The following `model_kwargs` are not used by the model: ['fp16']"
-        # pipe = pipeline(task=task, model=model, tokenizer=tokenizer, top_k=args.top_k, device=args.gpu, fp16=args.fp16)
-        # this is my temporary fix - not passing on that parameter.
-        pipe = pipeline(task=task, model=model, tokenizer=tokenizer, top_k=args.top_k, device=args.gpu)
-        logger.info(f"Reading question prompt templates from \"{args.question_prompts}\"...")
+        logger.info(
+            f"Reading question prompt templates from "
+            f"\"{args.question_prompts}\"...")
         prompt_templates = read_prompt_templates_from_csv(args.question_prompts)
     else:
-        pipe = pipeline(task=task, model=model, tokenizer=tokenizer, top_k=args.top_k, device=args.gpu)
-        logger.info(f"Reading fill-mask prompt templates from \"{args.fill_mask_prompts}\"...")
-        prompt_templates = read_prompt_templates_from_csv(args.fill_mask_prompts)
+        logger.info(
+            f"Reading fill-mask prompt templates from "
+            f"\"{args.fill_mask_prompts}\"...")
+        prompt_templates = read_prompt_templates_from_csv(
+            args.fill_mask_prompts)
+
     # Instantiate templates with train data
     instantiated_templates = []
     if task == "text-generation":
         logger.info(f"Reading train data from \"{args.train_data}\"...")
         train_data = read_train_data_from_csv(args.train_data)
+
         logger.info("Instantiating templates with train data...")
         for row in train_data:
-            relation = row['Relation']
-            prompt_template = prompt_templates[relation]
-            object_entities = row['ObjectEntities']
-            answers = ', '.join(object_entities)
-            instantiated_example = prompt_template.format(subject_entity=row["SubjectEntity"]) + f" {answers}"
+            prompt_template = prompt_templates[row["Relation"]]
+            answers = ", ".join(row["ObjectEntities"])
+            instantiated_example = prompt_template.format(
+                subject_entity=row["SubjectEntity"]) + f" {answers}"
             instantiated_templates.append(instantiated_example)
 
     # Load the input file
@@ -119,7 +144,7 @@ def run(args):
 
     # Run the model
     logger.info(f"Running the model...")
-    if task == 'fill-mask':
+    if task == "fill-mask":
         outputs = pipe(prompts, batch_size=args.batch_size)
     else:
         outputs = pipe(prompts, batch_size=args.batch_size, max_length=256)
@@ -134,7 +159,7 @@ def run(args):
                     object_entities_with_wikidata_id.append(wikidata_id)
         else:
             # Remove the original prompt from the generated text
-            qa_answer = output[0]['generated_text'].split(prompt)[-1].strip()
+            qa_answer = output[0]["generated_text"].split(prompt)[-1].strip()
             qa_entities = qa_answer.split(", ")
             for entity in qa_entities:
                 wikidata_id = disambiguation_baseline(entity)
@@ -156,7 +181,8 @@ def run(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run the Model with Question and Fill-Mask Prompts")
+    parser = argparse.ArgumentParser(
+        description="Run the Model with Question and Fill-Mask Prompts")
 
     parser.add_argument(
         "-m", "--model",

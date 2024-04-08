@@ -17,7 +17,8 @@ def true_positives(preds: List, gts: List) -> int:
 
 def precision(preds: List[str], gts: List[str]) -> float:
     try:
-        # When nothing is predicted, precision = 1 irrespective of the ground truth value
+        # When nothing is predicted, precision = 1
+        # irrespective of the ground truth value
         if len(preds) == 0:
             return 1
         # When the predictions are not empty
@@ -28,7 +29,8 @@ def precision(preds: List[str], gts: List[str]) -> float:
 
 def recall(preds: List[str], gts: List[str]) -> float:
     try:
-        # When ground truth is empty return 1 even if there are predictions (edge case)
+        # When ground truth is empty return 1
+        # even if there are predictions (edge case)
         if len(gts) == 0 or gts == [""]:
             return 1.0
         # When the ground truth is not empty
@@ -46,7 +48,8 @@ def f1_score(p: float, r: float) -> float:
 
 def rows_to_dict(rows: List[Dict]) -> Dict:
     """Index the ground truth/prediction rows by subject entity and relation."""
-    return {(r["SubjectEntity"], r["Relation"]): r["ObjectEntitiesID"] for r in rows}
+    return {(r["SubjectEntity"], r["Relation"]): r["ObjectEntitiesID"] for r in
+            rows}
 
 
 def evaluate_per_sr_pair(pred_rows, gt_rows) -> List[Dict[str, float]]:
@@ -57,7 +60,8 @@ def evaluate_per_sr_pair(pred_rows, gt_rows) -> List[Dict[str, float]]:
         gt_rows: The ground truth
 
     Returns:
-        A list of dictionaries containing the precision, recall and f1-score per Subject-Relation pair
+        A list of dictionaries containing the precision, recall and f1-score
+        per Subject-Relation pair
     """
     pred_dict = rows_to_dict(pred_rows)
     gt_dict = rows_to_dict(gt_rows)
@@ -94,7 +98,8 @@ def combine_scores_per_relation(scores_per_sr: List[Dict[str, float]]) -> dict:
         scores_per_sr: The scores per Subject-Relation pair
 
     Returns:
-        A dictionary containing the average precision, recall and f1-score per relation
+        A dictionary containing the average precision, recall and f1-score
+        per relation
     """
     scores = {}
     for r in scores_per_sr:
@@ -106,18 +111,20 @@ def combine_scores_per_relation(scores_per_sr: List[Dict[str, float]]) -> dict:
             "f1": r["f1"],
         })
 
+    final_scores = {}
     for rel in scores:
-        scores[rel] = {
+        final_scores[rel] = {
             "p": sum([x["p"] for x in scores[rel]]) / len(scores[rel]),
             "r": sum([x["r"] for x in scores[rel]]) / len(scores[rel]),
             "f1": sum([x["f1"] for x in scores[rel]]) / len(scores[rel]),
         }
 
-    return scores
+    return final_scores
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Evaluate Precision, Recall and F1-score of predictions")
+    parser = argparse.ArgumentParser(
+        description="Evaluate Precision, Recall and F1-score of predictions")
 
     parser.add_argument(
         "-p", "--predictions",
@@ -141,9 +148,12 @@ def main():
     scores_per_relation = combine_scores_per_relation(scores_per_sr_pair)
 
     scores_per_relation["*** Average ***"] = {
-        "p": sum([x["p"] for x in scores_per_relation.values()]) / len(scores_per_relation),
-        "r": sum([x["r"] for x in scores_per_relation.values()]) / len(scores_per_relation),
-        "f1": sum([x["f1"] for x in scores_per_relation.values()]) / len(scores_per_relation),
+        "p": sum([x["p"] for x in scores_per_relation.values()]) / len(
+            scores_per_relation),
+        "r": sum([x["r"] for x in scores_per_relation.values()]) / len(
+            scores_per_relation),
+        "f1": sum([x["f1"] for x in scores_per_relation.values()]) / len(
+            scores_per_relation),
     }
 
     print(pd.DataFrame(scores_per_relation).transpose().round(3))
