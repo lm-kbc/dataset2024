@@ -2,9 +2,8 @@ import argparse
 from typing import List, Dict
 
 import pandas as pd
-import numpy as np
 
-from file_io import *
+from file_io import read_lm_kbc_jsonl
 
 
 def true_positives(preds: List, gts: List) -> int:
