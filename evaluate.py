@@ -16,8 +16,8 @@ def true_positives(preds: List, gts: List) -> int:
 
 
 def precision(preds: List[str], gts: List[str]) -> float:
-    # when nothing is predicted, precision = 1 irrespective of the ground truth value
     try:
+        # When nothing is predicted, precision = 1 irrespective of the ground truth value
         if len(preds) == 0:
             return 1
         # When the predictions are not empty
@@ -32,7 +32,7 @@ def recall(preds: List[str], gts: List[str]) -> float:
         if len(gts) == 0 or gts == [""]:
             return 1.0
         # When the ground truth is not empty
-        return true_positives(preds, gts) / len(gts)
+        return min(true_positives(preds, gts) / len(gts), 1.0)
     except TypeError:
         return 0.0
 
