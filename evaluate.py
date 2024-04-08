@@ -16,7 +16,7 @@ def true_positives(preds: List, gts: List) -> int:
 
 
 def precision(preds: List[str], gts: List[str]) -> float:
-    # when nothing is predicted, precision 1 irrespective of the ground truth value
+    # when nothing is predicted, precision = 1 irrespective of the ground truth value
     try:
         if len(preds) == 0:
             return 1
@@ -45,10 +45,20 @@ def f1_score(p: float, r: float) -> float:
 
 
 def rows_to_dict(rows: List[Dict]) -> Dict:
+    """Index the ground truth/prediction rows by subject entity and relation."""
     return {(r["SubjectEntity"], r["Relation"]): r["ObjectEntitiesID"] for r in rows}
 
 
 def evaluate_per_sr_pair(pred_rows, gt_rows) -> List[Dict[str, float]]:
+    """
+    Evaluate the predictions per Subject-Relation pair
+    Args:
+        pred_rows: The predictions
+        gt_rows: The ground truth
+
+    Returns:
+        A list of dictionaries containing the precision, recall and f1-score per Subject-Relation pair
+    """
     pred_dict = rows_to_dict(pred_rows)
     gt_dict = rows_to_dict(gt_rows)
 
@@ -74,13 +84,18 @@ def evaluate_per_sr_pair(pred_rows, gt_rows) -> List[Dict[str, float]]:
             "f1": f1
         })
 
-        # if p > 1.0 or r > 1.0:
-        #     print(f"{subj} {rel} {p} {r} {f1} {gts} {preds}")
-
     return sorted(results, key=lambda x: (x["Relation"], x["SubjectEntity"]))
 
 
 def combine_scores_per_relation(scores_per_sr: List[Dict[str, float]]) -> dict:
+    """
+    Combine the scores per relation
+    Args:
+        scores_per_sr: The scores per Subject-Relation pair
+
+    Returns:
+        A dictionary containing the average precision, recall and f1-score per relation
+    """
     scores = {}
     for r in scores_per_sr:
         if r["Relation"] not in scores:
