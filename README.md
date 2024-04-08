@@ -96,7 +96,7 @@ This is how we write our prediction file:
 ```python
 import json
 
-# Fake predictions
+# Dummy predictions
 predictions = [
     {
         "SubjectEntity": "Dominican republic",
