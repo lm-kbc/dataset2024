@@ -4,14 +4,14 @@ This repository contains dataset for the 3rd LM-KBC challenge at ISWC 2024. Visi
 
 ### Dataset v0.1
 
- - 25.3.2024: Release of preliminary dataset v0.1, evaluation script, GPT-baseline
+- 25.3.2024: Release of preliminary dataset v0.1, evaluation script, GPT-baseline
 
 ### Baselines
 
 As baseline, we provide a script that can run masked LMs and causal LMs from Huggingface in the baseline.py, use these to generate entity surface forms, and use a Wikidata API for entity disambiguation.
 
 Running instructions for the Huggingface baselines:
- - For BERT
+- For BERT
 
 ```bash
 python baseline.py  \
@@ -25,7 +25,7 @@ python baseline.py  \
   --gpu 0
 ```
 
- - For OPT-1.3b
+- For OPT-1.3b
 
 ```bash
 python baseline.py \
