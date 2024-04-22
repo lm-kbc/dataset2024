@@ -23,7 +23,8 @@ This repository contains:
 
 ## News
 
-- 25.3.2024: Release of preliminary dataset v0.1, evaluation script, GPT-baseline
+- 22.4.2024: Release of dataset v1.0
+- 25.3.2024: Release of preliminary evaluation script and GPT-baseline
 
 ## Challenge overview
 
@@ -71,23 +72,23 @@ Number of unique subject-entities in the data splits.
     </tr>
     <tr>
         <td>seriesHasNumberOfEpisodes</td>
-        <td>...</td>
-        <td>...</td>
-        <td>...</td>
+        <td>100</td>
+        <td>100</td>
+        <td>100</td>
         <td>Object is numeric</td>
     </tr>
     <tr>
         <td>awardWonBy</td>
-        <td>...</td>
-        <td>...</td>
-        <td>...</td>
+        <td>10</td>
+        <td>10</td>
+        <td>10</td>
         <td>Many objects per subject</td>
     </tr>
     <tr>
         <td>companyTradesAtStockExchange</td>
-        <td>...</td>
-        <td>...</td>
-        <td>...</td>
+        <td>100</td>
+        <td>100</td>
+        <td>100</td>
         <td>Null values possible</td>
     </tr>
 </tbody>
@@ -95,7 +96,7 @@ Number of unique subject-entities in the data splits.
 
 ## Evaluation metrics
 
-We evaluate the predictions using Precision, Recall, and F1-score.
+We evaluate the predictions using macro precision, recall, and F1-score.
 See the evaluation script (`evaluate.py`) for more details.
 
 ```bash
