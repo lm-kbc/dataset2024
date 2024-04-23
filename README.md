@@ -175,7 +175,7 @@ configuration files for the baselines in the [configs](configs) directory.
     *** Average ***               0.444  0.336  0.146
     ```
 
-- `facebook/opt-1.3b` (Autoregressive Language Model, quantized)
+- `facebook/opt-1.3b` (Autoregressive Language Model, quantized) - with 5 random in-context examples
     ```bash
     python baseline.py -c configs/baseline-opt-1.3b.yaml -i data/val.jsonl
     python evaluate.py -g data/val.jsonl -p output/baseline-opt-1.3b.jsonl
@@ -191,7 +191,7 @@ configuration files for the baselines in the [configs](configs) directory.
     *** Average ***               0.172  0.266  0.148
     ```
 
-- `meta-llama/llama-2-7b-hf` (Autoregressive Language Model, quantized)
+- `meta-llama/llama-2-7b-hf` (Autoregressive Language Model, quantized) - with 5 random in-context examples
     ```bash
     export HUGGING_FACE_HUB_TOKEN=your_token
     python baseline.py -c configs/baseline-llama-2-7b-hf.yaml -i data/val.jsonl
@@ -208,7 +208,7 @@ configuration files for the baselines in the [configs](configs) directory.
     *** Average ***               0.332  0.372  0.245
     ```
 
-- `meta-llama/Meta-Llama-3-8B` (Autoregressive Language Model, quantized)
+- `meta-llama/Meta-Llama-3-8B` (Autoregressive Language Model, quantized) - with 5 random in-context examples
     ```bash
     export HUGGING_FACE_HUB_TOKEN=your_token
     python baseline.py -c configs/baseline-llama-3-8b.yaml -i data/val.jsonl
