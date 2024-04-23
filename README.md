@@ -134,7 +134,7 @@ Parameters: ``-g`` (the ground truth file), ``-p`` (the prediction file).
 2. Create a virtual environment and install the requirements:
 
     ```bash
-    conda create -n lm-kbc-2024 python=3.12
+    conda create -n lm-kbc-2024 python=3.12.1
     ```
 
     ```bash
@@ -151,38 +151,29 @@ Parameters: ``-g`` (the ground truth file), ``-p`` (the prediction file).
 
 ### Baselines
 
-As baseline, we provide a script that can run masked LMs and causal LMs from
-HuggingFace in the `baseline.py` script, use these
-to generate entity surface forms, and use a Wikidata API for entity
-disambiguation.
+We provide baselines using Masked Language
+Models ([models/baseline_fill_mask_model.py](models/baseline_fill_mask_model.py))
+and Causal Language
+Models ([models/baseline_generation_model.py](models/baseline_generation_model.py)).
 
-Running instructions for the HuggingFace baselines:
+You can run these baselines via the [baseline.py](baseline.py) script and
+providing it with the corresponding configuration file. We provide example
+configuration files for the baselines in the [configs](configs) directory.
 
-- For BERT
+- BERT
+   ```bash
+   python baseline.py -c configs/baseline-bert-large-cased.yaml
+   ```
 
-    ```bash
-    python baseline.py  \
-      --input data/val.jsonl \
-      --prompts_file masked-prompts.csv \
-      --output testrun-bert.jsonl \
-      --train_data data/train.jsonl \
-      --model bert-large-cased \
-      --batch_size 32 \
-      --gpu 0
-    ```
+- OPT
+   ```bash
+   python baseline.py -c configs/baseline-opt-1.3b.yaml
+   ```
 
-- For OPT-1.3B
-
-    ```bash
-    python baseline.py \
-      --input data/val.jsonl \
-      --prompts_file question-prompts.csv \
-      --output testrun-opt.jsonl \
-      --train_data data/train.jsonl \
-      --model facebook/opt-1.3b \
-      --batch_size 8 \
-      --gpu 0
-    ```
+- Llama-2
+   ```bash
+   python baseline.py -c configs/baseline-llama-2-7b-hf.yaml
+   ```
 
 #### Baseline performance
 

@@ -40,3 +40,5 @@ var/
 *_bak/
 
 tmp/
+
+slurm_*.sh
