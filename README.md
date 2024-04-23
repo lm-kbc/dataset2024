@@ -190,9 +190,6 @@ contain at least 3 fields to be used by the evaluation script:
 - ``ObjectEntitiesID``: the predicted object entities ID, which should be a list
   of Wikidata IDs (strings).
 
-You can take a look at the [example prediction file](data/dev.pred.jsonl) to
-see how a valid prediction file should look like.
-
 This is an example of how to write a prediction file:
 
 ```python
