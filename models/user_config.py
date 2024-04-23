@@ -7,6 +7,7 @@ from models.baseline_generation_model import GenerationModel
 class Models(Enum):
     BASELINE_FILL_MASK = "baseline_fill_mask"
     BASELINE_GENERATION = "baseline_generation"
+    # Add more models here
 
     @staticmethod
     def get_model(model_name: str):
