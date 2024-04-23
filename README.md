@@ -1,6 +1,7 @@
 # LM-KBC: Knowledge Base Construction from Pre-trained Language Models (3rd Edition)
 
-This repository hosts data for the LM-KBC challenge at ISWC 2024 (https://lm-kbc.github.io/challenge2024/).
+This repository hosts data for the LM-KBC challenge at ISWC
+2024 (https://lm-kbc.github.io/challenge2024/).
 
 This repository contains:
 
@@ -28,18 +29,28 @@ This repository contains:
 
 ## Challenge overview
 
-Pretrained language models (LMs) like ChatGPT have advanced a range of semantic tasks and have also shown promise for
-knowledge extraction from the models itself. Although several works have explored this ability in a setting called
-probing or prompting, the viability of knowledge base construction from LMs remains under-explored. In the 3rd edition
-of this challenge, we invite participants to build actual disambiguated knowledge bases from LMs, for given subjects and
+Pretrained language models (LMs) like ChatGPT have advanced a range of semantic
+tasks and have also shown promise for
+knowledge extraction from the models itself. Although several works have
+explored this ability in a setting called
+probing or prompting, the viability of knowledge base construction from LMs
+remains under-explored. In the 3rd edition
+of this challenge, we invite participants to build actual disambiguated
+knowledge bases from LMs, for given subjects and
 relations. In crucial difference to existing probing benchmarks like
-LAMA ([Petroni et al., 2019](https://arxiv.org/pdf/1909.01066.pdf)), we make no simplifying assumptions on relation
-cardinalities, i.e., a subject-entity can stand in relation with zero, one, or many object-entities. Furthermore,
-submissions need to go beyond just ranking predicted surface strings and materialize disambiguated entities in the
-output, which will be evaluated using established KB metrics of precision and recall.
+LAMA ([Petroni et al., 2019](https://arxiv.org/pdf/1909.01066.pdf)), we make no
+simplifying assumptions on relation
+cardinalities, i.e., a subject-entity can stand in relation with zero, one, or
+many object-entities. Furthermore,
+submissions need to go beyond just ranking predicted surface strings and
+materialize disambiguated entities in the
+output, which will be evaluated using established KB metrics of precision and
+recall.
 
-> Formally, given the input subject-entity (s) and relation (r), the task is to predict all the correct
-> object-entities ({o<sub>1</sub>, o<sub>2</sub>, ..., o<sub>k</sub>}) using LM probing.
+> Formally, given the input subject-entity (s) and relation (r), the task is to
+> predict all the correct
+> object-entities ({o<sub>1</sub>, o<sub>2</sub>, ..., o<sub>k</sub>}) using LM
+> probing.
 
 ## Dataset
 
@@ -133,13 +144,17 @@ Parameters: ``-g`` (the ground truth file), ``-p`` (the prediction file).
 
 3. Write your own solution and generate predictions (format described
    in [How to structure your prediction file](#how-to-structure-your-prediction-file)).
-4. Evaluate your predictions using the evaluation script (see [Evaluation metrics](#evaluation-metrics)).
-5. Submit your solutions to the organizers (see [Call for Participants](https://lm-kbc.github.io/challenge2024/#call-for-participants)).
+4. Evaluate your predictions using the evaluation script (
+   see [Evaluation metrics](#evaluation-metrics)).
+5. Submit your solutions to the organizers (
+   see [Call for Participants](https://lm-kbc.github.io/challenge2024/#call-for-participants)).
 
 ### Baselines
 
-As baseline, we provide a script that can run masked LMs and causal LMs from HuggingFace in the `baseline.py` script, use these
-to generate entity surface forms, and use a Wikidata API for entity disambiguation.
+As baseline, we provide a script that can run masked LMs and causal LMs from
+HuggingFace in the `baseline.py` script, use these
+to generate entity surface forms, and use a Wikidata API for entity
+disambiguation.
 
 Running instructions for the HuggingFace baselines:
 
@@ -183,7 +198,8 @@ contain at least 3 fields to be used by the evaluation script:
 
 - ``SubjectEntity``: the subject entity (string)
 - ``Relation``: the relation (string)
-- ``ObjectEntitiesID``: the predicted object entities ID, which should be a list of Wikidata IDs (strings).
+- ``ObjectEntitiesID``: the predicted object entities ID, which should be a list
+  of Wikidata IDs (strings).
 
 You can take a look at the [example prediction file](data/dev.pred.jsonl) to
 see how a valid prediction file should look like.
