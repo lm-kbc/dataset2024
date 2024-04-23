@@ -20,6 +20,7 @@ This repository contains:
     - [Setup](#setup)
     - [Baselines](#baselines)
     - [How to structure your prediction file](#how-to-structure-your-prediction-file)
+    - [Submit your predictions to CodaLab](#submit-your-predictions-to-codalab)
 
 ## News
 
