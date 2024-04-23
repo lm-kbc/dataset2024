@@ -163,8 +163,7 @@ Running instructions for the HuggingFace baselines:
     ```bash
     python baseline.py  \
       --input data/val.jsonl \
-      --fill_mask_prompts prompts.csv \
-      --question_prompts question-prompts.csv \
+      --prompts_file prompts.csv \
       --output testrun-bert.jsonl \
       --train_data data/train.jsonl \
       --model bert-large-cased \
@@ -177,8 +176,7 @@ Running instructions for the HuggingFace baselines:
     ```bash
     python baseline.py \
       --input data/val.jsonl \
-      --fill_mask_prompts prompts.csv \
-      --question_prompts question-prompts.csv \
+      --prompts_file question-prompts.csv \
       --output testrun-opt.jsonl \
       --train_data data/train.jsonl \
       --model facebook/opt-1.3b \
