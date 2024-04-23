@@ -267,3 +267,7 @@ with open(fp, "w") as f:
     for pred in predictions:
         f.write(json.dumps(pred) + "\n")
 ```
+
+### Submit your predictions to CodaLab
+
+TBA
