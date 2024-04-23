@@ -108,7 +108,7 @@ Number of unique subject-entities in the data splits.
 ## Evaluation metrics
 
 We evaluate the predictions using macro precision, recall, and F1-score.
-See the evaluation script (`evaluate.py`) for more details.
+See the evaluation script ([evaluate.py](evaluate.py)) for more details.
 
 ```bash
 python evaluate.py \
