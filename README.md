@@ -160,20 +160,53 @@ You can run these baselines via the [baseline.py](baseline.py) script and
 providing it with the corresponding configuration file. We provide example
 configuration files for the baselines in the [configs](configs) directory.
 
-- BERT
-   ```bash
-   python baseline.py -c configs/baseline-bert-large-cased.yaml
-   ```
+- `bert-large-cased` (Masked Language Model)
+    ```bash
+    python baseline.py -c configs/baseline-bert-large-cased.yaml -i data/val.jsonl
+    python evaluate.py -g data/val.jsonl -p output/baseline-bert-large-cased.jsonl
+    ```
+  Results:
+    ```text
+                                      p      r     f1
+    awardWonBy                    0.300  0.000  0.000
+    companyTradesAtStockExchange  0.000  0.350  0.000
+    countryLandBordersCountry     0.632  0.702  0.487
+    personHasCityOfDeath          0.290  0.630  0.242
+    seriesHasNumberOfEpisodes     1.000  0.000  0.000
+    *** Average ***               0.444  0.336  0.146
+    ```
 
-- OPT
-   ```bash
-   python baseline.py -c configs/baseline-opt-1.3b.yaml
-   ```
+- `facebook/opt-1.3b` (Masked Language Model)
+    ```bash
+    python baseline.py -c configs/baseline-opt-1.3b.yaml -i data/val.jsonl
+    python evaluate.py -g data/val.jsonl -p output/baseline-opt-1.3b.jsonl
+    ```
+  Results:
+    ```text
+                                      p      r     f1
+    awardWonBy                    0.100  0.006  0.011
+    companyTradesAtStockExchange  0.260  0.441  0.242
+    countryLandBordersCountry     0.230  0.395  0.216
+    personHasCityOfDeath          0.270  0.490  0.270
+    seriesHasNumberOfEpisodes     0.000  0.000  0.000
+    *** Average ***               0.172  0.266  0.148
+    ```
 
-- Llama-2
-   ```bash
-   python baseline.py -c configs/baseline-llama-2-7b-hf.yaml
-   ```
+- `meta-llama/llama-2-7b-hf` (Causal Language Model)
+    ```bash
+    python baseline.py -c configs/baseline-llama-2-7b-hf.yaml -i data/val.jsonl
+    python evaluate.py -g data/val.jsonl -p output/baseline-llama-2-7b-hf.jsonl
+    ```
+  Results:
+    ```text
+                                      p      r     f1
+    awardWonBy                    0.362  0.011  0.021
+    companyTradesAtStockExchange  0.340  0.528  0.314
+    countryLandBordersCountry     0.638  0.731  0.568
+    personHasCityOfDeath          0.320  0.590  0.320
+    seriesHasNumberOfEpisodes     0.000  0.000  0.000
+    *** Average ***               0.332  0.372  0.245
+    ```
 
 #### Baseline performance
 
@@ -210,12 +243,12 @@ predictions = [
     {
         "SubjectEntity": "Estonia",
         "Relation": "CountryBordersWithCountry",
-        "ObjectEntitiesID": []
+        "ObjectEntitiesID": [""]
     }
 
 ]
 
-fp = "/path/to/your/prediction/file.jsonl"
+fp = "./path/to/your/prediction/file.jsonl"
 
 with open(fp, "w") as f:
     for pred in predictions:
