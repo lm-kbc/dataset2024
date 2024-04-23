@@ -3,11 +3,10 @@ from loguru import logger
 from tqdm import tqdm
 from transformers import AutoModelForMaskedLM, pipeline, AutoTokenizer
 
-from models.abstract_model import AbstractModel
-from models.utils import read_prompt_templates_from_csv, disambiguation_baseline
+from models.baseline_model import BaselineModel
 
 
-class FillMaskModel(AbstractModel):
+class FillMaskModel(BaselineModel):
     def __init__(self, config):
         super().__init__()
 
@@ -20,6 +19,7 @@ class FillMaskModel(AbstractModel):
         self.threshold = config["threshold"]
         self.batch_size = config["batch_size"]
 
+        # Initialize the model and tokenizer
         logger.info(f"Loading the tokenizer `{llm_path}`...")
         self.tokenizer = AutoTokenizer.from_pretrained(llm_path)
 
@@ -33,10 +33,8 @@ class FillMaskModel(AbstractModel):
             device="cuda" if torch.cuda.is_available() else "cpu",
         )
 
-        logger.info(
-            f"Reading prompt templates from `{prompt_templates_file}`..."
-        )
-        self.prompt_templates = read_prompt_templates_from_csv(
+        # Prompt templates
+        self.prompt_templates = self.read_prompt_templates_from_csv(
             prompt_templates_file)
 
     def create_prompt(self, subject_entity: str, relation: str) -> str:
@@ -67,7 +65,7 @@ class FillMaskModel(AbstractModel):
 
             for seq in output:
                 if seq["score"] > self.threshold:
-                    wikidata_id = disambiguation_baseline(seq["token_str"])
+                    wikidata_id = self.disambiguation_baseline(seq["token_str"])
                     wikidata_ids.append(wikidata_id)
 
             result_row = {

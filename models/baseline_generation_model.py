@@ -7,11 +7,10 @@ from tqdm import tqdm
 from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer, \
     BitsAndBytesConfig
 
-from models.abstract_model import AbstractModel
-from models.utils import read_prompt_templates_from_csv, disambiguation_baseline
+from models.baseline_model import BaselineModel
 
 
-class GenerationModel(AbstractModel):
+class GenerationModel(BaselineModel):
     def __init__(self, config):
         super().__init__()
 
@@ -26,6 +25,7 @@ class GenerationModel(AbstractModel):
         self.batch_size = config["batch_size"]
         self.max_new_tokens = config["max_new_tokens"]
 
+        # Initialize the model and tokenizer
         logger.info(f"Loading the tokenizer `{llm_path}`...")
         self.tokenizer = AutoTokenizer.from_pretrained(
             llm_path,
@@ -59,10 +59,8 @@ class GenerationModel(AbstractModel):
             tokenizer=self.tokenizer,
         )
 
-        logger.info(
-            f"Reading prompt templates from `{prompt_templates_file}`..."
-        )
-        self.prompt_templates = read_prompt_templates_from_csv(
+        # Prompt templates
+        self.prompt_templates = self.read_prompt_templates_from_csv(
             prompt_templates_file)
 
         # Instantiate templates with train data
@@ -138,7 +136,7 @@ class GenerationModel(AbstractModel):
                 entity = entity.strip()
                 if entity.startswith("and "):
                     entity = entity[4:]
-                wikidata_id = disambiguation_baseline(entity)
+                wikidata_id = self.disambiguation_baseline(entity)
                 wikidata_ids.append(wikidata_id)
 
             result_row = {
