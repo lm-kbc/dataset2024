@@ -65,21 +65,28 @@ class GenerationModel(AbstractModel):
         self.prompt_templates = read_prompt_templates_from_csv(
             prompt_templates_file)
 
+        # Instantiate templates with train data
+        self.in_context_examples = self.instantiate_in_context_examples(
+            train_data_file)
+
+    def instantiate_in_context_examples(self, train_data_file):
         logger.info(f"Reading train data from `{train_data_file}`...")
         with open(train_data_file) as f:
-            self.train_data = [json.loads(line) for line in f]
+            train_data = [json.loads(line) for line in f]
 
         # Instantiate templates with train data
-        self.in_context_examples = []
+        in_context_examples = []
 
         logger.info("Instantiating in-context examples with train data...")
-        for row in self.train_data:
+        for row in train_data:
             template = self.prompt_templates[row["Relation"]]
             example = (
                 f'{template.format(subject_entity=row["SubjectEntity"])} '
                 f'{", ".join(row["ObjectEntities"])}'
             )
-            self.in_context_examples.append(example)
+            in_context_examples.append(example)
+
+        return in_context_examples
 
     def create_prompt(self, subject_entity: str, relation: str) -> str:
         template = self.prompt_templates[relation]
