@@ -1,21 +1,13 @@
 import argparse
 import csv
 import json
-import logging
-import requests
 import random
-
-from transformers import AutoModelForMaskedLM, AutoModelForCausalLM, \
-    AutoTokenizer, pipeline
 from typing import List
 
-# Configure logging
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(name)s -  %(message)s",
-    datefmt="%m/%d/%Y %H:%M:%S",
-    level=logging.INFO,
-)
-logger = logging.getLogger(__name__)
+import requests
+from loguru import logger
+from transformers import AutoModelForMaskedLM, AutoModelForCausalLM, \
+    AutoTokenizer, pipeline
 
 
 # Disambiguation baseline
