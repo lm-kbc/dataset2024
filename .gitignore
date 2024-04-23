@@ -42,3 +42,4 @@ var/
 tmp/
 
 slurm_*.sh
+output/
