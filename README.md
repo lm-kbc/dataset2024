@@ -19,7 +19,6 @@ This repository contains:
 5. [Getting started](#getting-started)
     - [Setup](#setup)
     - [Baselines](#baselines)
-        - [Baseline performance](#baseline-performance)
     - [How to structure your prediction file](#how-to-structure-your-prediction-file)
 
 ## News
@@ -207,10 +206,6 @@ configuration files for the baselines in the [configs](configs) directory.
     seriesHasNumberOfEpisodes     0.000  0.000  0.000
     *** Average ***               0.332  0.372  0.245
     ```
-
-#### Baseline performance
-
-TBD
 
 ### How to structure your prediction file
 
