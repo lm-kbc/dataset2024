@@ -152,7 +152,7 @@ Parameters: ``-g`` (the ground truth file), ``-p`` (the prediction file).
 
 We provide baselines using Masked Language
 Models ([models/baseline_fill_mask_model.py](models/baseline_fill_mask_model.py))
-and Causal Language
+and Autoregressive Language
 Models ([models/baseline_generation_model.py](models/baseline_generation_model.py)).
 
 You can run these baselines via the [baseline.py](baseline.py) script and
@@ -175,7 +175,7 @@ configuration files for the baselines in the [configs](configs) directory.
     *** Average ***               0.444  0.336  0.146
     ```
 
-- `facebook/opt-1.3b` (Causal Language Model, quantized)
+- `facebook/opt-1.3b` (Autoregressive Language Model, quantized)
     ```bash
     python baseline.py -c configs/baseline-opt-1.3b.yaml -i data/val.jsonl
     python evaluate.py -g data/val.jsonl -p output/baseline-opt-1.3b.jsonl
@@ -191,7 +191,7 @@ configuration files for the baselines in the [configs](configs) directory.
     *** Average ***               0.172  0.266  0.148
     ```
 
-- `meta-llama/llama-2-7b-hf` (Causal Language Model, quantized)
+- `meta-llama/llama-2-7b-hf` (Autoregressive Language Model, quantized)
     ```bash
     export HUGGING_FACE_HUB_TOKEN=your_token
     python baseline.py -c configs/baseline-llama-2-7b-hf.yaml -i data/val.jsonl
@@ -206,6 +206,23 @@ configuration files for the baselines in the [configs](configs) directory.
     personHasCityOfDeath          0.320  0.590  0.320
     seriesHasNumberOfEpisodes     0.000  0.000  0.000
     *** Average ***               0.332  0.372  0.245
+    ```
+
+- `meta-llama/Meta-Llama-3-8B` (Autoregressive Language Model, quantized)
+    ```bash
+    export HUGGING_FACE_HUB_TOKEN=your_token
+    python baseline.py -c configs/baseline-llama-3-8b.yaml -i data/val.jsonl
+    python evaluate.py -g data/val.jsonl -p output/baseline-llama-3-8b.jsonl
+    ```
+  Results:
+    ```text
+                                      p      r     f1
+    awardWonBy                    0.000  0.000  0.000
+    companyTradesAtStockExchange  0.540  0.688  0.518
+    countryLandBordersCountry     0.625  0.770  0.605
+    personHasCityOfDeath          0.430  0.650  0.430
+    seriesHasNumberOfEpisodes     0.000  0.000  0.000
+    *** Average ***               0.319  0.422  0.311
     ```
 
 ### How to structure your prediction file
