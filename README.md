@@ -238,7 +238,7 @@ predictions = [
     {
         "SubjectEntity": "Estonia",
         "Relation": "CountryBordersWithCountry",
-        "ObjectEntitiesID": [""]
+        "ObjectEntitiesID": []
     }
 
 ]
