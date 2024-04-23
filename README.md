@@ -163,7 +163,7 @@ Running instructions for the HuggingFace baselines:
     ```bash
     python baseline.py  \
       --input data/val.jsonl \
-      --prompts_file prompts.csv \
+      --prompts_file masked-prompts.csv \
       --output testrun-bert.jsonl \
       --train_data data/train.jsonl \
       --model bert-large-cased \

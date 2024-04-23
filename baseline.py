@@ -18,9 +18,11 @@ def disambiguation_baseline(item):
     except ValueError:
         # If not, proceed with the Wikidata search
         try:
-            url = (f"https://www.wikidata.org/w/api.php?"
-                   f"action=wbsearchentities&search={item}"
-                   f"&language=en&format=json")
+            url = (f"https://www.wikidata.org/w/api.php"
+                   f"?action=wbsearchentities"
+                   f"&search={item}"
+                   f"&language=en"
+                   f"&format=json")
             data = requests.get(url).json()
             # Return the first id (Could upgrade this in the future)
             return data["search"][0]["id"]
@@ -89,7 +91,7 @@ def run(args):
     try:
         pipe = pipeline(task=task, model=model, tokenizer=tokenizer,
                         top_k=args.top_k, device=args.gpu, fp16=args.fp16)
-    except ValueError:
+    except TypeError:
         pipe = pipeline(task=task, model=model, tokenizer=tokenizer,
                         top_k=args.top_k, device=args.gpu)
 
