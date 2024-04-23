@@ -103,11 +103,6 @@ class GenerationModel(AbstractModel):
                 relation=inp["Relation"]
             ) for inp in inputs
         ]
-        # outputs = self.pipe(
-        #     prompts,
-        #     batch_size=self.batch_size,
-        #     max_new_tokens=self.max_new_tokens,
-        # )
 
         outputs = []
         for i in tqdm(range(0, len(prompts), self.batch_size),
