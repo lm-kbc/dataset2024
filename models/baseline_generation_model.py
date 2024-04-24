@@ -18,12 +18,12 @@ class GenerationModel(BaselineModel):
         llm_path = config["llm_path"]
         prompt_templates_file = config["prompt_templates_file"]
         train_data_file = config["train_data_file"]
-        use_quantization = config["use_quantization"]
+        use_quantization = config.get("use_quantization", True)
 
         # Generation parameters
-        self.few_shot = config["few_shot"]
-        self.batch_size = config["batch_size"]
-        self.max_new_tokens = config["max_new_tokens"]
+        self.few_shot = config.get("few_shot", 5)
+        self.batch_size = config.get("batch_size", 4)
+        self.max_new_tokens = config.get("max_new_tokens", 64)
 
         # Initialize the model and tokenizer
         logger.info(f"Loading the tokenizer `{llm_path}`...")
@@ -126,26 +126,28 @@ class GenerationModel(BaselineModel):
         for inp, output, prompt in tqdm(zip(inputs, outputs, prompts),
                                         total=len(inputs),
                                         desc="Disambiguating entities"):
-            wikidata_ids = []
-
             # Remove the original prompt from the generated text
             qa_answer = output[0]["generated_text"].split(prompt)[
                 -1].split("\n")[0].strip()
-            qa_entities = qa_answer.split(", ")
-            for entity in qa_entities:
-                entity = entity.strip()
-                if entity.startswith("and "):
-                    entity = entity[4:].strip()
-                wikidata_id = self.disambiguation_baseline(entity)
-                if wikidata_id:
-                    wikidata_ids.append(wikidata_id)
-
-            result_row = {
+            wikidata_ids = self.disambiguate_entities(qa_answer)
+            results.append({
                 "SubjectEntityID": inp["SubjectEntityID"],
                 "SubjectEntity": inp["SubjectEntity"],
                 "Relation": inp["Relation"],
                 "ObjectEntitiesID": wikidata_ids,
-            }
-            results.append(result_row)
+            })
 
         return results
+
+    def disambiguate_entities(self, qa_answer: str):
+        wikidata_ids = []
+        qa_entities = qa_answer.split(", ")
+        for entity in qa_entities:
+            entity = entity.strip()
+            if entity.startswith("and "):
+                entity = entity[4:].strip()
+            wikidata_id = self.disambiguation_baseline(entity)
+            if wikidata_id:
+                wikidata_ids.append(wikidata_id)
+
+        return wikidata_ids

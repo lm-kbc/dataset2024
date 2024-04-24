@@ -160,9 +160,10 @@ Parameters: ``-g`` (the ground truth file), ``-p`` (the prediction file).
 ### Baselines
 
 We provide baselines using Masked Language
-Models ([models/baseline_fill_mask_model.py](models/baseline_fill_mask_model.py))
-and Autoregressive Language
-Models ([models/baseline_generation_model.py](models/baseline_generation_model.py)).
+Models ([models/baseline_fill_mask_model.py](models/baseline_fill_mask_model.py)),
+Autoregressive Language
+Models ([models/baseline_generation_model.py](models/baseline_generation_model.py)),
+and Llama-3 chat models ([models/baseline_llama_3_chat_model.py](models/baseline_llama_3_chat_model.py)),
 
 You can run these baselines via the [baseline.py](baseline.py) script and
 providing it with the corresponding configuration file. We provide example
@@ -255,6 +256,29 @@ countryLandBordersCountry       0.777    0.531     0.529    0.771    0.617     0
 personHasCityOfDeath            0.580    0.160     0.160    0.276    0.160     0.203        0.580            42
 seriesHasNumberOfEpisodes       0.170    0.160     0.160    0.162    0.160     0.161        0.990             1
 *** All Relations ***           0.537    0.257     0.260    0.487    0.094     0.157        1.011            99
+```
+
+#### Baseline 5: meta-llama/Meta-Llama-3-8B-Instruct
+
+Config
+file: [configs/baseline-llama-3-8b-instruct.yaml](configs/baseline-llama-3-8b-instruct.yaml)
+
+```bash
+export HUGGING_FACE_HUB_TOKEN=your_token
+python baseline.py -c configs/baseline-llama-3-8b-instruct.yaml -i data/val.jsonl
+python evaluate.py -g data/val.jsonl -p output/baseline-llama-3-8b-instruct.jsonl
+```
+
+Results:
+
+```text
+                              macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
+awardWonBy                      0.360    0.039     0.057    0.414    0.024     0.046        8.700             1
+companyTradesAtStockExchange    0.542    0.418     0.402    0.476    0.430     0.452        1.030            13
+countryLandBordersCountry       0.960    0.627     0.650    0.949    0.755     0.841        2.294            18
+personHasCityOfDeath            0.620    0.150     0.150    0.283    0.150     0.196        0.530            47
+seriesHasNumberOfEpisodes       0.535    0.150     0.147    0.224    0.150     0.180        0.670            39
+*** All Relations ***           0.631    0.304     0.303    0.564    0.132     0.214        1.233           118
 ```
 
 ### How to structure your prediction file
