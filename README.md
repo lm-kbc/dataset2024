@@ -19,6 +19,10 @@ This repository contains:
 5. [Getting started](#getting-started)
     - [Setup](#setup)
     - [Baselines](#baselines)
+        - [Baseline 1: bert-large-cased](#baseline-1-bert-large-cased)
+        - [Baseline 2: facebook/opt-1.3b](#baseline-2-facebookopt-13b)
+        - [Baseline 3: meta-llama/llama-2-7b-hf](#baseline-3-meta-llamallama-2-7b-hf)
+        - [Baseline 4: meta-llama/Meta-Llama-3-8B](#baseline-4-meta-llamameta-llama-3-8b)
     - [How to structure your prediction file](#how-to-structure-your-prediction-file)
     - [Submit your predictions to CodaLab](#submit-your-predictions-to-codalab)
 
@@ -147,9 +151,11 @@ Parameters: ``-g`` (the ground truth file), ``-p`` (the prediction file).
 4. Evaluate your predictions using the evaluation script
    (see [Evaluation metrics](#evaluation-metrics)).
 5. Submit your solutions to the organizers
-   (see [Call for Participants](https://lm-kbc.github.io/challenge2024/#call-for-participants)),
+   (
+   see [Call for Participants](https://lm-kbc.github.io/challenge2024/#call-for-participants)),
    and/or submit your predictions to CodaLab
-   (see [Submit your predictions to CodaLab](#submit-your-predictions-to-codalab)).
+   (
+   see [Submit your predictions to CodaLab](#submit-your-predictions-to-codalab)).
 
 ### Baselines
 
@@ -162,74 +168,94 @@ You can run these baselines via the [baseline.py](baseline.py) script and
 providing it with the corresponding configuration file. We provide example
 configuration files for the baselines in the [configs](configs) directory.
 
-- `bert-large-cased` (Masked Language Model)
-    ```bash
-    python baseline.py -c configs/baseline-bert-large-cased.yaml -i data/val.jsonl
-    python evaluate.py -g data/val.jsonl -p output/baseline-bert-large-cased.jsonl
-    ```
-  Results:
-    ```text
-                                  macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
-    awardWonBy                      0.300    0.000     0.000    0.000    0.000     0.000        1.000           3.0
-    companyTradesAtStockExchange    0.000    0.000     0.000    0.000    0.000     0.000        2.810           0.0
-    countryLandBordersCountry       0.632    0.452     0.487    0.628    0.464     0.534        2.132           1.0
-    personHasCityOfDeath            0.290    0.180     0.142    0.115    0.180     0.141        1.560          16.0
-    seriesHasNumberOfEpisodes       1.000    0.000     0.000    1.000    0.000     0.000        0.000         100.0
-    *** All Relations ***           0.463    0.129     0.125    0.184    0.055     0.084        1.566         120.0
-    ```
+#### Baseline 1: bert-large-cased
 
-- `facebook/opt-1.3b` (Autoregressive Language Model, quantized) - with 5 random
-  in-context examples
-    ```bash
-    python baseline.py -c configs/baseline-opt-1.3b.yaml -i data/val.jsonl
-    python evaluate.py -g data/val.jsonl -p output/baseline-opt-1.3b.jsonl
-    ```
-  Results:
-    ```text
-                                  macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
-    awardWonBy                      0.740    0.000     0.001    0.286    0.001     0.003        0.700           7.0
-    companyTradesAtStockExchange    0.582    0.148     0.139    0.129    0.149     0.138        1.320          44.0
-    countryLandBordersCountry       0.528    0.282     0.225    0.322    0.245     0.278        2.191          19.0
-    personHasCityOfDeath            0.610    0.060     0.060    0.125    0.060     0.081        0.480          55.0
-    seriesHasNumberOfEpisodes       0.380    0.010     0.010    0.016    0.010     0.012        0.630          37.0
-    *** All Relations ***           0.530    0.108     0.096    0.185    0.037     0.062        1.056         162.0
-    ```
+Config
+file: [configs/baseline-bert-large-cased.yaml](configs/baseline-bert-large-cased.yaml)
 
-- `meta-llama/llama-2-7b-hf` (Autoregressive Language Model, quantized) - with 5
-  random in-context examples
-    ```bash
-    export HUGGING_FACE_HUB_TOKEN=your_token
-    python baseline.py -c configs/baseline-llama-2-7b-hf.yaml -i data/val.jsonl
-    python evaluate.py -g data/val.jsonl -p output/baseline-llama-2-7b-hf.jsonl
-    ```
-  Results:
-    ```text
-                                  macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
-    awardWonBy                      0.800    0.001     0.003    0.333    0.001     0.001        0.300           7.0
-    companyTradesAtStockExchange    0.537    0.216     0.224    0.347    0.228     0.275        0.750          29.0
-    countryLandBordersCountry       0.777    0.415     0.429    0.727    0.474     0.574        1.882          19.0
-    personHasCityOfDeath            0.500    0.170     0.163    0.250    0.170     0.202        0.680          34.0
-    seriesHasNumberOfEpisodes       0.060    0.040     0.040    0.040    0.040     0.040        0.990           2.0
-    *** All Relations ***           0.451    0.187     0.190    0.378    0.071     0.119        0.987          91.0
-    ```
+```bash
+python baseline.py -c configs/baseline-bert-large-cased.yaml -i data/val.jsonl
+python evaluate.py -g data/val.jsonl -p output/baseline-bert-large-cased.jsonl
+```
 
-- `meta-llama/Meta-Llama-3-8B` (Autoregressive Language Model, quantized) - with
-  5 random in-context examples
-    ```bash
-    export HUGGING_FACE_HUB_TOKEN=your_token
-    python baseline.py -c configs/baseline-llama-3-8b.yaml -i data/val.jsonl
-    python evaluate.py -g data/val.jsonl -p output/baseline-llama-3-8b.jsonl
-    ```
-  Results:
-    ```text
-                                  macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
-    awardWonBy                      0.900    0.000     0.000    0.000    0.000     0.000        0.100           9.0
-    companyTradesAtStockExchange    0.660    0.291     0.302    0.493    0.289     0.365        0.670          33.0
-    countryLandBordersCountry       0.777    0.531     0.529    0.771    0.617     0.686        2.309          14.0
-    personHasCityOfDeath            0.580    0.160     0.160    0.276    0.160     0.203        0.580          42.0
-    seriesHasNumberOfEpisodes       0.170    0.160     0.160    0.162    0.160     0.161        0.990           1.0
-    *** All Relations ***           0.537    0.257     0.260    0.487    0.094     0.157        1.011          99.0
-    ```
+Results:
+
+```text
+                              macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
+awardWonBy                      0.300    0.000     0.000    0.000    0.000     0.000        1.000           3.0
+companyTradesAtStockExchange    0.000    0.000     0.000    0.000    0.000     0.000        2.810           0.0
+countryLandBordersCountry       0.632    0.452     0.487    0.628    0.464     0.534        2.132           1.0
+personHasCityOfDeath            0.290    0.180     0.142    0.115    0.180     0.141        1.560          16.0
+seriesHasNumberOfEpisodes       1.000    0.000     0.000    1.000    0.000     0.000        0.000         100.0
+*** All Relations ***           0.463    0.129     0.125    0.184    0.055     0.084        1.566         120.0
+```
+
+#### Baseline 2: facebook/opt-1.3b
+
+Config file: [configs/baseline-opt-1.3b.yaml](configs/baseline-opt-1.3b.yaml)
+
+```bash
+python baseline.py -c configs/baseline-opt-1.3b.yaml -i data/val.jsonl
+python evaluate.py -g data/val.jsonl -p output/baseline-opt-1.3b.jsonl
+```
+
+Results:
+
+```text
+                              macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
+awardWonBy                      0.740    0.000     0.001    0.286    0.001     0.003        0.700           7.0
+companyTradesAtStockExchange    0.582    0.148     0.139    0.129    0.149     0.138        1.320          44.0
+countryLandBordersCountry       0.528    0.282     0.225    0.322    0.245     0.278        2.191          19.0
+personHasCityOfDeath            0.610    0.060     0.060    0.125    0.060     0.081        0.480          55.0
+seriesHasNumberOfEpisodes       0.380    0.010     0.010    0.016    0.010     0.012        0.630          37.0
+*** All Relations ***           0.530    0.108     0.096    0.185    0.037     0.062        1.056         162.0
+```
+
+#### Baseline 3: meta-llama/llama-2-7b-hf
+
+Config
+file: [configs/baseline-llama-2-7b-hf.yaml](configs/baseline-llama-2-7b-hf.yaml)
+
+```bash
+export HUGGING_FACE_HUB_TOKEN=your_token
+python baseline.py -c configs/baseline-llama-2-7b-hf.yaml -i data/val.jsonl
+python evaluate.py -g data/val.jsonl -p output/baseline-llama-2-7b-hf.jsonl
+```
+
+Results:
+
+```text
+                              macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
+awardWonBy                      0.800    0.001     0.003    0.333    0.001     0.001        0.300           7.0
+companyTradesAtStockExchange    0.537    0.216     0.224    0.347    0.228     0.275        0.750          29.0
+countryLandBordersCountry       0.777    0.415     0.429    0.727    0.474     0.574        1.882          19.0
+personHasCityOfDeath            0.500    0.170     0.163    0.250    0.170     0.202        0.680          34.0
+seriesHasNumberOfEpisodes       0.060    0.040     0.040    0.040    0.040     0.040        0.990           2.0
+*** All Relations ***           0.451    0.187     0.190    0.378    0.071     0.119        0.987          91.0
+```
+
+#### Baseline 4: meta-llama/Meta-Llama-3-8B
+
+Config
+file: [configs/baseline-llama-3-8b.yaml](configs/baseline-llama-3-8b.yaml)
+
+```bash
+export HUGGING_FACE_HUB_TOKEN=your_token
+python baseline.py -c configs/baseline-llama-3-8b.yaml -i data/val.jsonl
+python evaluate.py -g data/val.jsonl -p output/baseline-llama-3-8b.jsonl
+```
+
+Results:
+
+```text
+                              macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
+awardWonBy                      0.900    0.000     0.000    0.000    0.000     0.000        0.100           9.0
+companyTradesAtStockExchange    0.660    0.291     0.302    0.493    0.289     0.365        0.670          33.0
+countryLandBordersCountry       0.777    0.531     0.529    0.771    0.617     0.686        2.309          14.0
+personHasCityOfDeath            0.580    0.160     0.160    0.276    0.160     0.203        0.580          42.0
+seriesHasNumberOfEpisodes       0.170    0.160     0.160    0.162    0.160     0.161        0.990           1.0
+*** All Relations ***           0.537    0.257     0.260    0.487    0.094     0.157        1.011          99.0
+```
 
 ### How to structure your prediction file
 
