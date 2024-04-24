@@ -37,7 +37,7 @@ def recall(preds: List[str], gts: List[str]) -> float:
     try:
         # When ground truth is empty return 1
         # even if there are predictions (edge case)
-        if len(gts) == 0 or gts == [""]:
+        if len(gts) == 0:
             return 1.0
         # When the ground truth is not empty
         return min(true_positives(preds, gts) / len(gts), 1.0)
@@ -54,21 +54,14 @@ def f1_score(p: float, r: float) -> float:
 
 def rows_to_dict(rows: List[Dict]) -> Dict:
     """Index the ground truth/prediction rows by subject entity and relation."""
-    return {(r["SubjectEntity"], r["Relation"]): r["ObjectEntitiesID"] for r in
-            rows}
+    return {
+        (r["SubjectEntity"], r["Relation"]): list(set(r["ObjectEntitiesID"]))
+        for r in rows
+    }
 
 
 def evaluate_per_sr_pair(pred_rows, gt_rows) -> List[Dict[str, float]]:
-    """
-    Evaluate the predictions per Subject-Relation pair
-    Args:
-        pred_rows: The predictions
-        gt_rows: The ground truth
-
-    Returns:
-        A list of dictionaries containing the precision, recall and f1-score
-        per Subject-Relation pair
-    """
+    """Evaluate the predictions per Subject-Relation pair"""
     pred_dict = rows_to_dict(pred_rows)
     gt_dict = rows_to_dict(gt_rows)
 
@@ -91,22 +84,17 @@ def evaluate_per_sr_pair(pred_rows, gt_rows) -> List[Dict[str, float]]:
             "Relation": rel,
             "p": p,
             "r": r,
-            "f1": f1
+            "f1": f1,
+            "tp": true_positives(preds, gts),
+            "total_pred": len(preds),
+            "total_gt": len(gts),
         })
 
     return sorted(results, key=lambda x: (x["Relation"], x["SubjectEntity"]))
 
 
-def combine_scores_per_relation(scores_per_sr: List[Dict[str, float]]) -> dict:
-    """
-    Combine the scores per relation
-    Args:
-        scores_per_sr: The scores per Subject-Relation pair
-
-    Returns:
-        A dictionary containing the average precision, recall and f1-score
-        per relation
-    """
+def macro_average_per_relation(scores_per_sr: List[Dict[str, float]]) -> dict:
+    """Compute the macro average scores per relation"""
     scores = {}
     for r in scores_per_sr:
         if r["Relation"] not in scores:
@@ -117,15 +105,107 @@ def combine_scores_per_relation(scores_per_sr: List[Dict[str, float]]) -> dict:
             "f1": r["f1"],
         })
 
-    final_scores = {}
+    macro_averages = {}
     for rel in scores:
-        final_scores[rel] = {
-            "p": sum([x["p"] for x in scores[rel]]) / len(scores[rel]),
-            "r": sum([x["r"] for x in scores[rel]]) / len(scores[rel]),
-            "f1": sum([x["f1"] for x in scores[rel]]) / len(scores[rel]),
+        macro_averages[rel] = {
+            "macro-p": sum([x["p"] for x in scores[rel]]) / len(scores[rel]),
+            "macro-r": sum([x["r"] for x in scores[rel]]) / len(scores[rel]),
+            "macro-f1": sum([x["f1"] for x in scores[rel]]) / len(scores[rel]),
         }
 
-    return final_scores
+    # Macro average for all relations
+    all_rel_macro_p = sum([x["p"] for x in scores_per_sr]) / len(scores_per_sr)
+    all_rel_macro_r = sum([x["r"] for x in scores_per_sr]) / len(scores_per_sr)
+    all_rel_macro_f1 = sum([x["f1"] for x in scores_per_sr]) / len(
+        scores_per_sr)
+
+    macro_averages["*** All Relations ***"] = {
+        "macro-p": all_rel_macro_p,
+        "macro-r": all_rel_macro_r,
+        "macro-f1": all_rel_macro_f1,
+    }
+
+    return macro_averages
+
+
+def micro_average_per_relation(scores_per_sr: List[Dict[str, float]]) -> dict:
+    """Compute the micro average scores per relation"""
+    scores = {}
+    for r in scores_per_sr:
+        if r["Relation"] not in scores:
+            scores[r["Relation"]] = {
+                "tp": 0,
+                "total_pred": 0,
+                "total_gt": 0,
+            }
+        scores[r["Relation"]]["tp"] += r["tp"]
+        scores[r["Relation"]]["total_pred"] += r["total_pred"]
+        scores[r["Relation"]]["total_gt"] += r["total_gt"]
+
+    micro_averages = {}
+    for rel in scores:
+        micro_p = scores[rel]["tp"] / scores[rel]["total_pred"] if scores[rel][
+                                                                       "total_pred"] > 0 else 1.0
+        micro_r = scores[rel]["tp"] / scores[rel]["total_gt"] if scores[rel][
+                                                                     "total_gt"] > 0 else 1.0
+
+        micro_averages[rel] = {
+            "micro-p": micro_p,
+            "micro-r": micro_r,
+            "micro-f1": f1_score(micro_p, micro_r),
+        }
+
+    # Micro average for all relations
+    total_tp = sum([x["tp"] for x in scores.values()])
+    total_pred = sum([x["total_pred"] for x in scores.values()])
+    total_gt = sum([x["total_gt"] for x in scores.values()])
+
+    all_rel_micro_p = total_tp / total_pred if total_pred > 0 else 1.0
+    all_rel_micro_r = total_tp / total_gt if total_gt > 0 else 1.0
+
+    micro_averages["*** All Relations ***"] = {
+        "micro-p": all_rel_micro_p,
+        "micro-r": all_rel_micro_r,
+        "micro-f1": f1_score(all_rel_micro_p, all_rel_micro_r),
+    }
+
+    return micro_averages
+
+
+def prediction_statistics(scores_per_sr: List[Dict[str, float]]) -> dict:
+    """Get the average numbers of predictions and the numbers of empty predictions per relation."""
+    stats = {}
+    for r in scores_per_sr:
+        if r["Relation"] not in stats:
+            stats[r["Relation"]] = {
+                "num_sr_pairs": 0,
+                "total_pred": 0,
+                "empty_pred": 0,
+            }
+        stats[r["Relation"]]["num_sr_pairs"] += 1
+        stats[r["Relation"]]["total_pred"] += r["total_pred"]
+        if r["total_pred"] == 0:
+            stats[r["Relation"]]["empty_pred"] += 1
+
+    final_stats = {}
+    for rel in stats:
+        final_stats[rel] = {
+            "avg. #preds": stats[rel]["total_pred"] / stats[rel][
+                "num_sr_pairs"],
+            "#empty preds": stats[rel]["empty_pred"],
+        }
+
+    # Average numbers of predictions and the numbers of empty predictions for all relations
+    total_sr_pairs = len(scores_per_sr)
+    total_preds = sum([x["total_pred"] for x in stats.values()])
+    total_empty_preds = sum([x["empty_pred"] for x in stats.values()])
+
+    final_stats["*** All Relations ***"] = {
+        "avg. #preds": total_preds / total_sr_pairs,
+        "#empty preds": total_empty_preds,
+    }
+
+    return final_stats
 
 
 def main():
@@ -147,22 +227,28 @@ def main():
 
     args = parser.parse_args()
 
+    # Read the predictions and ground truth
     pred_rows = read_jsonl_file(args.predictions)
     gt_rows = read_jsonl_file(args.ground_truth)
 
+    # Evaluate the predictions
     scores_per_sr_pair = evaluate_per_sr_pair(pred_rows, gt_rows)
-    scores_per_relation = combine_scores_per_relation(scores_per_sr_pair)
 
-    scores_per_relation["*** Average ***"] = {
-        "p": sum([x["p"] for x in scores_per_relation.values()]) / len(
-            scores_per_relation),
-        "r": sum([x["r"] for x in scores_per_relation.values()]) / len(
-            scores_per_relation),
-        "f1": sum([x["f1"] for x in scores_per_relation.values()]) / len(
-            scores_per_relation),
-    }
+    # Macro average
+    macro_per_relation = macro_average_per_relation(scores_per_sr_pair)
+    macro_df = pd.DataFrame(macro_per_relation).transpose()
 
-    print(pd.DataFrame(scores_per_relation).transpose().round(3))
+    # Micro average
+    micro_per_relation = micro_average_per_relation(scores_per_sr_pair)
+    micro_df = pd.DataFrame(micro_per_relation).transpose()
+
+    # Statistics
+    stats = prediction_statistics(scores_per_sr_pair)
+    stats_df = pd.DataFrame(stats).transpose()
+
+    # Combine the results
+    results = pd.concat([macro_df, micro_df, stats_df], axis=1)
+    print(results.round(3))
 
 
 if __name__ == "__main__":

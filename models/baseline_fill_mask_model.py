@@ -62,11 +62,11 @@ class FillMaskModel(BaselineModel):
                 total=len(inputs),
                 desc="Disambiguating entities"):
             wikidata_ids = []
-
             for seq in output:
                 if seq["score"] > self.threshold:
                     wikidata_id = self.disambiguation_baseline(seq["token_str"])
-                    wikidata_ids.append(wikidata_id)
+                    if wikidata_id:
+                        wikidata_ids.append(wikidata_id)
 
             result_row = {
                 "SubjectEntityID": inp["SubjectEntityID"],

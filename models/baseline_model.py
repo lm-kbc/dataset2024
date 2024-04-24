@@ -28,15 +28,16 @@ class BaselineModel(AbstractModel):
         return prompt_templates
 
     @staticmethod
-    def disambiguation_baseline(item):
+    def disambiguation_baseline(item) -> str:
         """A simple disambiguation function that returns the Wikidata ID of an item."""
+        item = str(item).strip()
 
-        if not item:
-            return item
+        if not item or item == "None":
+            return ""
 
         try:
             # If item can be converted to an integer, return it directly
-            return int(item)
+            return str(int(item))
         except ValueError:
             # If not, proceed with the Wikidata search
             try:
@@ -47,7 +48,7 @@ class BaselineModel(AbstractModel):
                        f"&format=json")
                 data = requests.get(url).json()
                 # Return the first id (Could upgrade this in the future)
-                return data["search"][0]["id"]
+                return str(data["search"][0]["id"])
             except Exception as e:
                 logger.error(f"Error getting Wikidata ID for `{item}`: {e}")
                 return item

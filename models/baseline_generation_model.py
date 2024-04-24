@@ -80,7 +80,7 @@ class GenerationModel(BaselineModel):
             template = self.prompt_templates[row["Relation"]]
             example = (
                 f'{template.format(subject_entity=row["SubjectEntity"])} '
-                f'{", ".join(row["ObjectEntities"])}'
+                f'{", ".join(row["ObjectEntities"]) if row["ObjectEntities"] else "None"}'
             )
             in_context_examples.append(example)
 
@@ -135,9 +135,10 @@ class GenerationModel(BaselineModel):
             for entity in qa_entities:
                 entity = entity.strip()
                 if entity.startswith("and "):
-                    entity = entity[4:]
+                    entity = entity[4:].strip()
                 wikidata_id = self.disambiguation_baseline(entity)
-                wikidata_ids.append(wikidata_id)
+                if wikidata_id:
+                    wikidata_ids.append(wikidata_id)
 
             result_row = {
                 "SubjectEntityID": inp["SubjectEntityID"],
