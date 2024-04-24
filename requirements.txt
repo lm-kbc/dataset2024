@@ -4,3 +4,7 @@ transformers
 tqdm
 requests
 numpy
+loguru
+PyYAML
+accelerate
+bitsandbytes

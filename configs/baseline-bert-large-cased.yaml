@@ -1,0 +1,12 @@
+model: "baseline_fill_mask"
+
+# LLM
+llm_path: "bert-large-cased"
+
+# Prompt templates
+prompt_templates_file: "prompt_templates/masked_prompts.csv"
+
+# LLM parameters
+top_k: 10
+threshold: 0.1
+batch_size: 32

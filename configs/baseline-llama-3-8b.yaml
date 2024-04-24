@@ -1,0 +1,20 @@
+model: "baseline_generation"
+
+# LLM
+llm_path: "meta-llama/Meta-Llama-3-8B"
+
+# Prompt templates
+prompt_templates_file: "prompt_templates/question_prompts.csv"
+
+# LLM parameters
+batch_size: 4
+max_new_tokens: 64
+
+# Quantization: useful for large models and limited computing resources
+use_quantization: true
+
+# In-context learning parameters
+few_shot: 5
+
+# Data
+train_data_file: "data/train.jsonl"
