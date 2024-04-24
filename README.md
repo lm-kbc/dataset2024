@@ -23,6 +23,7 @@ This repository contains:
         - [Baseline 2: facebook/opt-1.3b](#baseline-2-facebookopt-13b)
         - [Baseline 3: meta-llama/llama-2-7b-hf](#baseline-3-meta-llamallama-2-7b-hf)
         - [Baseline 4: meta-llama/Meta-Llama-3-8B](#baseline-4-meta-llamameta-llama-3-8b)
+        - [Baseline 5: meta-llama/Meta-Llama-3-8B-Instruct](#baseline-5-meta-llamameta-llama-3-8b-instruct)
     - [How to structure your prediction file](#how-to-structure-your-prediction-file)
     - [Submit your predictions to CodaLab](#submit-your-predictions-to-codalab)
 
