@@ -182,12 +182,12 @@ Results:
 
 ```text
                               macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
-awardWonBy                      0.300    0.000     0.000    0.000    0.000     0.000        1.000           3.0
-companyTradesAtStockExchange    0.000    0.000     0.000    0.000    0.000     0.000        2.810           0.0
-countryLandBordersCountry       0.632    0.452     0.487    0.628    0.464     0.534        2.132           1.0
-personHasCityOfDeath            0.290    0.180     0.142    0.115    0.180     0.141        1.560          16.0
-seriesHasNumberOfEpisodes       1.000    0.000     0.000    1.000    0.000     0.000        0.000         100.0
-*** All Relations ***           0.463    0.129     0.125    0.184    0.055     0.084        1.566         120.0
+awardWonBy                      0.300    0.000     0.000    0.000    0.000     0.000        1.000             3
+companyTradesAtStockExchange    0.000    0.000     0.000    0.000    0.000     0.000        2.810             0
+countryLandBordersCountry       0.632    0.452     0.487    0.628    0.464     0.534        2.132             1
+personHasCityOfDeath            0.290    0.180     0.142    0.115    0.180     0.141        1.560            16
+seriesHasNumberOfEpisodes       1.000    0.000     0.000    1.000    0.000     0.000        0.000           100
+*** All Relations ***           0.463    0.129     0.125    0.184    0.055     0.084        1.566           120
 ```
 
 #### Baseline 2: facebook/opt-1.3b
@@ -203,12 +203,12 @@ Results:
 
 ```text
                               macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
-awardWonBy                      0.740    0.000     0.001    0.286    0.001     0.003        0.700           7.0
-companyTradesAtStockExchange    0.582    0.148     0.139    0.129    0.149     0.138        1.320          44.0
-countryLandBordersCountry       0.528    0.282     0.225    0.322    0.245     0.278        2.191          19.0
-personHasCityOfDeath            0.610    0.060     0.060    0.125    0.060     0.081        0.480          55.0
-seriesHasNumberOfEpisodes       0.380    0.010     0.010    0.016    0.010     0.012        0.630          37.0
-*** All Relations ***           0.530    0.108     0.096    0.185    0.037     0.062        1.056         162.0
+awardWonBy                      0.740    0.000     0.001    0.286    0.001     0.003        0.700             7
+companyTradesAtStockExchange    0.582    0.148     0.139    0.129    0.149     0.138        1.320            44
+countryLandBordersCountry       0.528    0.282     0.225    0.322    0.245     0.278        2.191            19
+personHasCityOfDeath            0.610    0.060     0.060    0.125    0.060     0.081        0.480            55
+seriesHasNumberOfEpisodes       0.380    0.010     0.010    0.016    0.010     0.012        0.630            37
+*** All Relations ***           0.530    0.108     0.096    0.185    0.037     0.062        1.056           162
 ```
 
 #### Baseline 3: meta-llama/llama-2-7b-hf
@@ -226,12 +226,12 @@ Results:
 
 ```text
                               macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
-awardWonBy                      0.800    0.001     0.003    0.333    0.001     0.001        0.300           7.0
-companyTradesAtStockExchange    0.537    0.216     0.224    0.347    0.228     0.275        0.750          29.0
-countryLandBordersCountry       0.777    0.415     0.429    0.727    0.474     0.574        1.882          19.0
-personHasCityOfDeath            0.500    0.170     0.163    0.250    0.170     0.202        0.680          34.0
-seriesHasNumberOfEpisodes       0.060    0.040     0.040    0.040    0.040     0.040        0.990           2.0
-*** All Relations ***           0.451    0.187     0.190    0.378    0.071     0.119        0.987          91.0
+awardWonBy                      0.800    0.001     0.003    0.333    0.001     0.001        0.300             7
+companyTradesAtStockExchange    0.537    0.216     0.224    0.347    0.228     0.275        0.750            29
+countryLandBordersCountry       0.777    0.415     0.429    0.727    0.474     0.574        1.882            19
+personHasCityOfDeath            0.500    0.170     0.163    0.250    0.170     0.202        0.680            34
+seriesHasNumberOfEpisodes       0.060    0.040     0.040    0.040    0.040     0.040        0.990             2
+*** All Relations ***           0.451    0.187     0.190    0.378    0.071     0.119        0.987            91
 ```
 
 #### Baseline 4: meta-llama/Meta-Llama-3-8B
@@ -249,12 +249,12 @@ Results:
 
 ```text
                               macro-p  macro-r  macro-f1  micro-p  micro-r  micro-f1  avg. #preds  #empty preds
-awardWonBy                      0.900    0.000     0.000    0.000    0.000     0.000        0.100           9.0
-companyTradesAtStockExchange    0.660    0.291     0.302    0.493    0.289     0.365        0.670          33.0
-countryLandBordersCountry       0.777    0.531     0.529    0.771    0.617     0.686        2.309          14.0
-personHasCityOfDeath            0.580    0.160     0.160    0.276    0.160     0.203        0.580          42.0
-seriesHasNumberOfEpisodes       0.170    0.160     0.160    0.162    0.160     0.161        0.990           1.0
-*** All Relations ***           0.537    0.257     0.260    0.487    0.094     0.157        1.011          99.0
+awardWonBy                      0.900    0.000     0.000    0.000    0.000     0.000        0.100             9
+companyTradesAtStockExchange    0.660    0.291     0.302    0.493    0.289     0.365        0.670            33
+countryLandBordersCountry       0.777    0.531     0.529    0.771    0.617     0.686        2.309            14
+personHasCityOfDeath            0.580    0.160     0.160    0.276    0.160     0.203        0.580            42
+seriesHasNumberOfEpisodes       0.170    0.160     0.160    0.162    0.160     0.161        0.990             1
+*** All Relations ***           0.537    0.257     0.260    0.487    0.094     0.157        1.011            99
 ```
 
 ### How to structure your prediction file

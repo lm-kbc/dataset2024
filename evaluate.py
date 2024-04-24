@@ -236,19 +236,20 @@ def main():
 
     # Macro average
     macro_per_relation = macro_average_per_relation(scores_per_sr_pair)
-    macro_df = pd.DataFrame(macro_per_relation).transpose()
+    macro_df = pd.DataFrame(macro_per_relation).transpose().round(3)
 
     # Micro average
     micro_per_relation = micro_average_per_relation(scores_per_sr_pair)
-    micro_df = pd.DataFrame(micro_per_relation).transpose()
+    micro_df = pd.DataFrame(micro_per_relation).transpose().round(3)
 
     # Statistics
     stats = prediction_statistics(scores_per_sr_pair)
-    stats_df = pd.DataFrame(stats).transpose()
+    stats_df = pd.DataFrame(stats).transpose().round(3)
+    stats_df["#empty preds"] = stats_df["#empty preds"].astype(int)
 
     # Combine the results
     results = pd.concat([macro_df, micro_df, stats_df], axis=1)
-    print(results.round(3))
+    print(results)
 
 
 if __name__ == "__main__":
