@@ -152,11 +152,9 @@ Parameters: ``-g`` (the ground truth file), ``-p`` (the prediction file).
 4. Evaluate your predictions using the evaluation script
    (see [Evaluation metrics](#evaluation-metrics)).
 5. Submit your solutions to the organizers
-   (
-   see [Call for Participants](https://lm-kbc.github.io/challenge2024/#call-for-participants)),
+   (see [Call for Participants](https://lm-kbc.github.io/challenge2024/#call-for-participants)),
    and/or submit your predictions to CodaLab
-   (
-   see [Submit your predictions to CodaLab](#submit-your-predictions-to-codalab)).
+   (see [Submit your predictions to CodaLab](#submit-your-predictions-to-codalab)).
 
 ### Baselines
 
